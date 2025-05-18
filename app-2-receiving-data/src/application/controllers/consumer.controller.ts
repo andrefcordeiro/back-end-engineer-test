@@ -1,4 +1,4 @@
-import { City } from '@domain/entities/city.interface';
+import { Person } from '@domain/entities/person.interface';
 import { StateService } from '@domain/services/state.service';
 import { State } from '@infrastructure/mongoose/state.schema';
 import { Controller, Get, Logger, Post } from '@nestjs/common';
@@ -10,26 +10,19 @@ export class ConsumerController {
 
   private readonly logger = new Logger(ConsumerController.name);
 
-  // @MessagePattern('Csv_Process')
-  // async receiveFromQueue(@Payload() payload: any): Promise<string> {
-  //   if (!Array.isArray(payload)) {
-  //     this.logger.error('Invalid payload: expected an array.');
-  //     throw new Error('Invalid payload: expected an array.');
-  //   }
-
-  //   const batch = payload.slice(0, 1000);
-
-  //   this.logger.log(`Processing batch of size ${batch.length}`);
-  //   this.logger.debug(`Batch content: ${JSON.stringify(batch, null, 2)}`);
-
-  //   return `Processed batch of size ${batch.length}`;
-  // }
-
-  @Post('cities')
-  readBatch(@Payload() cities: City[]): void {
-    this.stateService.storeStates(cities);
+  /**
+   * Endpoint to receive and process the people data.
+   * @param people
+   */
+  @Post('people')
+  readBatch(@Payload() people: Person[]): void {
+    this.stateService.storeStates(people);
   }
 
+  /**
+   * Ednpoint to return every state stored on the database.
+   * @returns List of states.
+   */
   @Get('states')
   async getStates(): Promise<State[]> {
     return await this.stateService.findAll();
