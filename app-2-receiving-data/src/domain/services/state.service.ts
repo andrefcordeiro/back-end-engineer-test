@@ -54,4 +54,12 @@ export class StateService {
   findAll() {
     return this.stateModel.find().exec();
   }
+
+  /**
+   * Method that deletes states stored on the database.
+   * @returns List of states.
+   */
+  deleteAll(): Promise<any> {
+    return this.stateModel.deleteMany({});
+  }
 }

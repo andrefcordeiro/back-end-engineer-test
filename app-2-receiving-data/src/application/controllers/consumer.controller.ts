@@ -1,7 +1,7 @@
 import { Person } from '@domain/entities/person.interface';
 import { StateService } from '@domain/services/state.service';
 import { State } from '@infrastructure/mongoose/state.schema';
-import { Controller, Get, Logger, Post } from '@nestjs/common';
+import { Controller, Delete, Get, Logger, Post } from '@nestjs/common';
 import { Payload } from '@nestjs/microservices';
 
 @Controller('consumer')
@@ -26,5 +26,13 @@ export class ConsumerController {
   @Get('states')
   async getStates(): Promise<State[]> {
     return await this.stateService.findAll();
+  }
+
+  /**
+   * Ednpoint to delete every state stored on the database.
+   */
+  @Delete('states')
+  deleteStates(): Promise<any> {
+    return this.stateService.deleteAll();
   }
 }

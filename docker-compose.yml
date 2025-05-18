@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+  app-1-sending-data:
+    build:
+      context: ./app-1-sending-data
+      dockerfile: Dockerfile
+    container_name: app-1-sending-data
+    restart: always
+    ports:
+      - "3000:3000"
+    networks:
+      - nest-network
+
+  app-2-receiving-data:
+    build:
+      context: ./app-2-receiving-data
+      dockerfile: Dockerfile
+    container_name: app-2-receiving-data
+    restart: always
+    depends_on:
+      - mongo
+    environment:
+      MONGODB_URI: mongodb://mongo:27017/states
+    ports:
+      - "3001:3000"
+    networks:
+      - nest-network
+
+
+  mongo:
+    image: mongo:6
+    container_name: mongo
+    restart: always
+    ports:
+      - "27017:27017"
+    networks:
+      - nest-network
+    volumes:
+      - mongo-data:/data/db
+
+volumes:
+  mongo-data:
+
+networks:
+  nest-network:
